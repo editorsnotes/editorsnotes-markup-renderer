@@ -6,12 +6,12 @@
   "description": "Renderer for Editors' Notes markup language",
   "main": "lib/index.js",
   "bin": {
-    "editorsnotes_renderer": "./bin/serve"
+    "editorsnotes_renderer": "./bin/serve.js"
   },
   "scripts": {
     "compile": "rm -rf lib && babel src --out-dir lib",
     "prepublish": "npm run compile",
-    "start": "./bin/serve",
+    "start": "./bin/serve.js",
     "test": "tape src/test/*.js",
     "test-debug": "node debug node_modules/.bin/tape src/test/*.js"
   },
