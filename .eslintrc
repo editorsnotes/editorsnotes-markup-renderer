@@ -1,0 +1,16 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "comma-dangle": false,
+    "curly": [2, "multi-line"],
+    "new-cap": false,
+    "no-mixed-requires": false,
+    "no-underscore-dangle": false,
+    "no-use-before-define": [2, "nofunc"],
+    "quotes": false,
+    "semi": false
+  }
+}
