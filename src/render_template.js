@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint camelcase:0 */
+
 var zoteroToCSL = require('zotero-to-csl')
 
 function itemNotFound(type) {
@@ -15,21 +17,21 @@ function getCSLItems(data, baseID) {
   Object.keys(zoteroJSON).forEach(function (id) {
     var key = baseID + id;
     items[key] = zoteroToCSL(zoteroJSON[id]);
-    items[key].id = key;
+    items[key].id = items[key].system_id = key;
   });
 
   Object.keys(cslJSON).forEach(function (id) {
     var key = baseID + id;
     if (key in items) return;
     items[key] = cslJSON[id];
-    items[key].id = key;
+    items[key].id = items[key].system_id = key;
   });
 
   Object.keys(descriptions).forEach(function (id) {
     var key = baseID + id;
     if (key in items) return;
     items[key] = { type: '', title: descriptions[id] };
-    items[key].id = key;
+    items[key].id = items[key].system_id = key;
   });
 
   return items;
@@ -40,9 +42,22 @@ module.exports = function renderTemplate(opts) {
     , cslPrefix = Math.random().toString().slice(3) + 'd'
     , cslItems = getCSLItems(opts, cslPrefix)
     , parser
+    , prefix
+    , suffix
+    , removeSuffix
+    , delimiter
 
   opts.note = opts.note || {};
   opts.topic = opts.topic || {};
+
+  prefix = cslEngine.citation.opt.layout_prefix;
+  suffix = cslEngine.citation.opt.layout_suffix;
+  delimiter = cslEngine.citation.opt.layout_delimiter;
+
+  removeSuffix = function (str) {
+    var idx = str.lastIndexOf(suffix);
+    return idx === -1 ? str : str.slice(0, idx);
+  }
 
   cslEngine.sys.items = cslItems;
   cslEngine.updateItems(Object.keys(cslItems), true);
@@ -52,27 +67,35 @@ module.exports = function renderTemplate(opts) {
     resolveItemText: function (itemType, itemID) {
       return opts[itemType][itemID] || itemNotFound(itemType);
     },
-    makeCitationText: function (citation, inline) {
+    makeInlineCitation: function (citations) {
       var citationData
         , citationText
 
       citationData = {
-        citationItems: [
-          {
+        citationItems: citations.map(function (citation) {
+          return {
             id: cslPrefix + citation.id,
             prefix: citation.prefix,
             suffix: citation.locator
           }
-        ],
+        }),
         properties: {}
       }
 
-      // NOTE: I haven't yet tested the makeBibliography command
-      citationText = inline ?
-        cslEngine.previewCitationCluster(citationData, [], [], 'text') :
-        cslEngine.makeBibliography({ select: [ { id: cslPrefix + citation.id } ] })
+      citationText = cslEngine.previewCitationCluster(citationData, [], [], 'text');
 
-      return citationText;
+      return {
+        prefix,
+        suffix,
+        delimiter,
+        citations: removeSuffix(citationText)
+          .replace(prefix, '')
+          .split(delimiter)
+      }
+    },
+    makeBibliographyEntry: function (citation) {
+      /* cslEngine.output.formats.html['@font-style/italic'] = "<em>%%STRING%%</em>"; */
+      return cslEngine.makeBibliography({ select: [ { id: cslPrefix + citation.id } ] });
     }
   });
 

@@ -9,10 +9,18 @@ test('Render a template', function (t) {
   t.plan(1);
 
   opts = {
-    data: 'Here I am citing [@@d1, p. 3].',
+    data: 'Here I am citing [see @@d1, p. 3; @@d2].',
     projectBaseURL: '/',
     document_zotero_json: {
       1: {
+        itemType: 'book',
+        title: 'The Society of the Spectacle',
+        creators: [
+          { creatorType: 'author', lastName: 'Debord', firstName: 'Guy' }
+        ],
+        date: '1967'
+      },
+      2: {
         itemType: 'book',
         title: 'The Society of the Spectacle',
         creators: [
@@ -25,6 +33,13 @@ test('Render a template', function (t) {
 
   t.equal(
     renderTemplate(opts),
-    '<p>Here I am citing <cite>(Debord 1967, p. 3)</cite>.</p>\n'
+    '<p>Here I am citing <cite>(' +
+      '<a rel="http://editorsnotes.org/v#document" href="/documents/1/">' +
+        'see Debord 1967a, p. 3' +
+      '</a>; ' +
+      '<a rel="http://editorsnotes.org/v#document" href="/documents/2/">' +
+        'Debord 1967b' +
+      '</a>' +
+    ')</cite>.</p>\n'
   );
 });

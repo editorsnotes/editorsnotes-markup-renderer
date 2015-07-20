@@ -6,7 +6,10 @@ var renderNull = function () { return 'NULL' }
 parser = require('editorsnotes-markup-parser')({
   projectBaseURL: '/',
   resolveItemText: renderNull,
-  makeCitationText: renderNull
+  makeBibliographyEntry: renderNull,
+  makeInlineCitation: function(citations) {
+    return { citations: citations.map(renderNull) }
+  }
 });
 
 function getENReferences(nodeArray, items) {
