@@ -94,8 +94,7 @@ module.exports = function renderTemplate(opts) {
       }
     },
     makeBibliographyEntry: function (citation) {
-      /* cslEngine.output.formats.html['@font-style/italic'] = "<em>%%STRING%%</em>"; */
-      return cslEngine.makeBibliography({ select: [ { id: cslPrefix + citation.id } ] });
+      return cslEngine.makeBibliography({ select: [ { id: cslPrefix + citation.id } ] })[1][0].trim()
     }
   });
 
