@@ -10,7 +10,7 @@ var http = require('http')
   , argv = require('optimist').default({ port: 7194, host: '127.0.0.1' }).argv
 
 function embeddedItems(res, data) {
-  var getEmbeddedItems = require('../lib/utils/get_embedded_items')
+  var getEmbeddedItems = require('../lib/get_embedded_items')
     , items = getEmbeddedItems(data)
 
   res.statusCode = 200;
