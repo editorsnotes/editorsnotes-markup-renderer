@@ -63,6 +63,8 @@ http.createServer(function (req, res) {
       return;
     }
 
+    json.projectBaseURL = json.url_root;
+
     try {
       if (parsed.query.only_transcluded_items) {
         embeddedItems(res, json.data);
