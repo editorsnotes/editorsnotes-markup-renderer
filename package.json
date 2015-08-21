@@ -1,6 +1,6 @@
 {
   "name": "editorsnotes-markup-renderer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Patrick Golden",
   "license": "AGPL-3.0",
   "description": "Renderer for Editors' Notes markup language",
