@@ -74,3 +74,26 @@ test('Render a document block with a bibliography', function (t) {
     '</div>'
   )
 });
+
+test('Render a note title', function (t) {
+  var renderTemplate = require('../render_template')
+    , opts
+
+  t.plan(1);
+
+  opts = {
+    data: 'I am referring to @@n12.',
+    projectBaseURL: '/',
+    note: {
+      12: 'A NOTE'
+    }
+  }
+
+  t.equal(
+    renderTemplate(opts),
+    '<p>I am referring to <a class="en-item en-item-note" rel="http://editorsnotes.org/v#note" href="/notes/12/">' +
+      'A NOTE' +
+    '</a>.</p>\n'
+  )
+
+});
