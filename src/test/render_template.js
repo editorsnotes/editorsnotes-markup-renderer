@@ -79,10 +79,12 @@ test('Render a document block with a bibliography', function (t) {
   t.equal(
     renderTemplate(opts, cslEngine),
     '<h1>Heading</h1>\n' +
-    '<div class="doc-block">' +
-      '<div class="doc">Wilson, Patrick. 1968. <i>Two Kinds of Power</i>.</div>' +
+    '<section class="document-block">' +
+      '<div><a rel="http://editorsnotes.org/v#document" href="/documents/400/">' +
+      'Wilson, Patrick. 1968. <i>Two Kinds of Power</i>.' +
+      '</a></div>' +
       '<p>in a block</p>\n' +
-    '</div>'
+    '</section>'
   )
 });
 
@@ -106,7 +108,7 @@ test('Render a note title', function (t) {
 
   t.equal(
     renderTemplate(opts, cslEngine),
-    '<p>I am referring to <a class="en-item en-item-note" rel="http://editorsnotes.org/v#note" href="/notes/12/">' +
+    '<p>I am referring to <a rel="http://editorsnotes.org/v#note" href="/notes/12/">' +
       'A NOTE' +
     '</a>.</p>\n'
   )
