@@ -20,7 +20,8 @@ function embeddedItems(res, data) {
 
 function renderedTemplate(res, opts) {
   var renderTemplate = require('../lib/render_template')
-    , html = renderTemplate(opts)
+    , cslEngine = require('../lib/csl_engine')
+    , html = renderTemplate(opts, cslEngine)
 
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');

@@ -8,47 +8,53 @@ function itemNotFound(type) {
   return `(${type} not found)`
 }
 
-function getCSLItems(data, baseID) {
+function getCSLItems(documents, baseID) {
   var items = {}
-    , zoteroJSON = data.document_zotero_json || {}
-    , cslJSON = data.document_csl_json || {}
-    , descriptions = data.document_description || {}
 
-  Object.keys(zoteroJSON).forEach(function (id) {
-    var key = baseID + id;
-    items[key] = zoteroToCSL(zoteroJSON[id]);
-    items[key].id = items[key].system_id = key;
-  });
+  Object.keys(documents).forEach(function (documentID) {
+    var doc = documents[documentID]
+      , key = baseID + documentID
 
-  Object.keys(cslJSON).forEach(function (id) {
-    var key = baseID + id;
-    if (key in items) return;
-    items[key] = cslJSON[id];
-    items[key].id = items[key].system_id = key;
-  });
+    if (doc.zotero_data) {
+      items[key] = zoteroToCSL(doc.zotero_data);
+    } else if (doc.csl_data) {
+      items[key] = doc.csl_data;
+    } else {
+      items[key] = { type: '', title: doc.description };
+    }
 
-  Object.keys(descriptions).forEach(function (id) {
-    var key = baseID + id;
-    if (key in items) return;
-    items[key] = { type: '', title: descriptions[id] };
     items[key].id = items[key].system_id = key;
   });
 
   return items;
 }
 
-module.exports = function renderTemplate(opts) {
-  var cslEngine = require('./csl_engine')
-    , cslPrefix = Math.random().toString().slice(3) + 'd'
-    , cslItems = getCSLItems(opts, cslPrefix)
+function byID(arr) {
+  var ret = {}
+
+  arr.forEach(function (item) {
+    var id = item.topic_node_id || item.id;
+    ret[id] = item;
+  });
+
+  return ret;
+}
+
+module.exports = function renderTemplate(opts, cslEngine) {
+  var cslPrefix = Math.random().toString().slice(3) + 'd'
+    , itemsByID = {}
+    , cslItems
     , parser
     , prefix
     , suffix
     , removeSuffix
     , delimiter
 
-  opts.note = opts.note || {};
-  opts.topic = opts.topic || {};
+  ['note', 'topic', 'document'].forEach(function (type) {
+    itemsByID[type] = byID(opts[type] || []);
+  });
+
+  cslItems = getCSLItems(itemsByID.document, cslPrefix)
 
   prefix = cslEngine.citation.opt.layout_prefix;
   suffix = cslEngine.citation.opt.layout_suffix;
@@ -65,6 +71,13 @@ module.exports = function renderTemplate(opts) {
   parser = require('editorsnotes-markup-parser')({
     projectBaseURL: opts.projectBaseURL,
     resolveItemText: function (itemType, itemID) {
+      if (itemType === 'topic') {
+        let topic = itemsByID.topic[itemID];
+        return topic ? topic.preferred_name : itemNotFound('topic');
+      } else if (itemType === 'note') {
+        let note = itemsByID.note[itemID];
+        return note ? note.title : itemNotFound('note');
+      }
       return opts[itemType][itemID] || itemNotFound(itemType);
     },
     makeInlineCitation: function (citations) {
