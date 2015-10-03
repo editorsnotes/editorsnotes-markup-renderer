@@ -25,7 +25,7 @@
     "editorsnotes-markup-parser": "^5.0.0",
     "optimist": "^0.6.1",
     "routes": "^2.1.0",
-    "zotero-to-csl": "^1.0.1"
+    "zotero-to-csl": "^1.0.2"
   },
   "devDependencies": {
     "babel": "^5.6.23",
