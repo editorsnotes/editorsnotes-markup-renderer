@@ -1,6 +1,6 @@
 {
   "name": "editorsnotes-markup-renderer",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "author": "Patrick Golden",
   "license": "AGPL-3.0",
   "description": "Renderer for Editors' Notes markup language",
@@ -22,7 +22,7 @@
   "dependencies": {
     "body": "^5.1.0",
     "citeproc-js-node": "0.0.2",
-    "editorsnotes-markup-parser": "^5.0.0",
+    "editorsnotes-markup-parser": "^6.0.0",
     "optimist": "^0.6.1",
     "routes": "^2.1.0",
     "zotero-to-csl": "^1.0.2"

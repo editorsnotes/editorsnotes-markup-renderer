@@ -41,10 +41,10 @@ test('Render a template', function (t) {
   t.equal(
     renderTemplate(opts, cslEngine),
     '<p>Here I am citing <cite>(' +
-      '<a rel="http://editorsnotes.org/v#document" href="/documents/1/">' +
+      '<a href="/documents/1/" class="ENInlineReference ENInlineReference-document">' +
         'see Debord 1967a, p. 3' +
       '</a>; ' +
-      '<a rel="http://editorsnotes.org/v#document" href="/documents/2/">' +
+      '<a href="/documents/2/" class="ENInlineReference ENInlineReference-document">' +
         'Debord 1967b' +
       '</a>' +
     ')</cite>.</p>\n'
@@ -59,7 +59,7 @@ test('Render a document block with a bibliography', function (t) {
   t.plan(1);
 
   opts = {
-    data: '# Heading\n::: document 400\nin a block\n:::',
+    data: '# Heading\n::: document @@d400\nin a block\n:::',
     projectBaseURL: '/',
     document: [
       {
@@ -79,8 +79,8 @@ test('Render a document block with a bibliography', function (t) {
   t.equal(
     renderTemplate(opts, cslEngine),
     '<h1>Heading</h1>\n' +
-    '<section class="document-block">' +
-      '<div><a rel="http://editorsnotes.org/v#document" href="/documents/400/">' +
+    '<section class="ENDocumentBlock">' +
+      '<div><a href="/documents/400/" class="ENDocumentBlock--Citation">' +
       'Wilson, Patrick. 1968. <i>Two Kinds of Power</i>.' +
       '</a></div>' +
       '<p>in a block</p>\n' +
@@ -108,7 +108,7 @@ test('Render a note title', function (t) {
 
   t.equal(
     renderTemplate(opts, cslEngine),
-    '<p>I am referring to <a rel="http://editorsnotes.org/v#note" href="/notes/12/">' +
+    '<p>I am referring to <a href="/notes/12/" class="ENInlineReference ENInlineReference-note">' +
       'A NOTE' +
     '</a>.</p>\n'
   )

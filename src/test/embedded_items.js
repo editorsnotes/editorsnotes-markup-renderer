@@ -30,7 +30,7 @@ test('Get embedded items', function (t) {
 
 
   var documentBlock = `
-::: document 14
+::: document @@d14
 inside a document block
 :::
 `
