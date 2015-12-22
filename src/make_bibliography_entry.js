@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (cslEngine, citation) {
-  var select = [{ id: citation.id }]
+  var select = [{ field: 'id', value: '' + citation.id }]
     , bibliography = cslEngine.makeBibliography({ select })
     , bibItems = bibliography[1]
 
