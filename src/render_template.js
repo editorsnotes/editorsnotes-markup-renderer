@@ -22,5 +22,5 @@ module.exports = function renderTemplate(opts, cslEngine) {
     makeBibliographyEntry: makeBibliographyEntry.bind(null, cslEngine)
   });
 
-  return parser.render(opts.data);
+  return parser.render(opts.data, {});
 }
