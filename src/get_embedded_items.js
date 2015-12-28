@@ -29,5 +29,5 @@ function getENReferences(nodeArray, items) {
 }
 
 module.exports = function (text) {
-  return getENReferences(parser.parse(text))
+  return getENReferences(parser.parse(text, {}))
 }
