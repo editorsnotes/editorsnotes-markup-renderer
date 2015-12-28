@@ -31,6 +31,7 @@ function renderedTemplate(res, opts) {
 function handleServerError(res, err) {
   res.statusCode = 500;
   res.setHeader('Content-Type', 'text/plain');
+  console.error(err.stack);
   res.end(err.toString());
 }
 
