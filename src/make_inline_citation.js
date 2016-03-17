@@ -33,5 +33,6 @@ module.exports = function (cslEngine, citations) {
     citations: removeSuffix(citationText)
       .replace(prefix, '')
       .split(delimiter)
+      .map(text => text.trim())
   }
 }
